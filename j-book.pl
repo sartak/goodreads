@@ -3,6 +3,7 @@ use 5.14.0;
 use utf8::all;
 use warnings;
 use Text::CSV_XS;
+use Sort::Naturally;
 
 my $csv = Text::CSV_XS->new ({ binary => 1, allow_loose_quotes => 1 }) or
 die "Cannot use CSV: ".Text::CSV_XS->error_diag ();
@@ -106,6 +107,6 @@ for (@books) {
     s/\s{2,}/ /g;
 }
 
-for my $book (sort @books) {
+for my $book (nsort @books) {
     say $book;
 }
