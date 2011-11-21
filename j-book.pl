@@ -107,6 +107,6 @@ for (@books) {
     s/\s{2,}/ /g;
 }
 
-for my $book (nsort @books) {
+for my $book (nsort([sub { my ($left, $right) = @_; $left cmp $right }], @books)) {
     say $book;
 }
