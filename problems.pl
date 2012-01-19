@@ -13,6 +13,8 @@ while (my $row = $csv->getline ($fh)) {
         unless $row->[16] =~ /english/ || $row->[16] =~ /japanese/;
     warn "Missing review of read book: $row->[1]\n"
         if $row->[16] !~ /currently-reading|wont-read|to-read/ && $row->[7] eq '0';
+    warn "Rated book is unread: $row->[1]\n"
+        if $row->[16] =~ /currently-reading|wont-read|to-read/ && $row->[7] ne '0';
 }
 $csv->eof or $csv->error_diag ();
 close $fh;
