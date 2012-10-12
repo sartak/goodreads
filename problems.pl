@@ -15,6 +15,8 @@ while (my $row = $csv->getline ($fh)) {
         if $row->[16] !~ /currently-reading|wont-read|to-read/ && $row->[7] eq '0';
     warn "Rated book is unread: $row->[1]\n"
         if $row->[16] =~ /currently-reading|wont-read|to-read/ && $row->[7] ne '0';
+    warn "$row->[16] book needs rescue: $row->[0]"
+        if $row->[16] =~ /currently-reading|(?<!to-)read/ && $row->[1] =~ /Unknown/;
 }
 $csv->eof or $csv->error_diag ();
 close $fh;
