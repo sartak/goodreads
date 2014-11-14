@@ -112,6 +112,12 @@ for (@books) {
     s/\s{2,}/ /g;
 }
 
-for my $book (nsort([sub { my ($left, $right) = @_; $left cmp $right }], @books)) {
+my @sorted = do {
+    open my $handle, '>', '/dev/null';
+    local *STDOUT = $handle;
+    nsort([sub { my ($left, $right) = @_; $left cmp $right }], @books);
+};
+
+for my $book (@sorted) {
     say $book;
 }
