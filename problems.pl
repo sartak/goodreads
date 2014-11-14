@@ -14,9 +14,9 @@ while (my $row = $csv->getline ($fh)) {
     warn "Missing japanese or english shelf: $row->[1]\n"
         unless $shelves =~ /english|japanese/;
     warn "Missing review of read book: $row->[1]\n"
-        if $shelves !~ /currently-reading|wont-read|to-read/ && $row->[7] eq '0';
+        if $shelves !~ /currently-reading|wont-read|to-read|wishlist/ && $row->[7] eq '0';
     warn "Rated book is unread: $row->[1]\n"
-        if $shelves =~ /currently-reading|wont-read|to-read/ && $row->[7] ne '0';
+        if $shelves =~ /currently-reading|wont-read|to-read|wishlist/ && $row->[7] ne '0';
 
     warn "$shelves book needs rescue: $row->[0]"
         if $shelves =~ /currently-reading|(?<!to-)read/ && $row->[1] =~ /Unknown/;
