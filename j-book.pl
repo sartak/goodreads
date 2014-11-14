@@ -12,13 +12,14 @@ scalar <$fh>;
 my @books;
 while (my $row = $csv->getline ($fh)) {
     push @books, $row->[1]
-        if $row->[16] =~ /japanese/;
+        if $row->[16] =~ /japanese/ && $row->[16] !~ /wishlist/;
 }
 $csv->eof or $csv->error_diag ();
 close $fh;
 
 for (@books) {
     # cruft
+    s/\(In Japanese\)/ /gi;
     s/\(Bunch comics\)/ /g;
     s/\(集英社文庫―コミック版\)/ /g;
     s/\(ハヤカワ文庫 SF \d+\)/ /g;
@@ -33,7 +34,7 @@ for (@books) {
     s/\(アスペクトコミックス\)/ /g;
     s/\(アニメコミックス\)/ /g;
     s/\(in Japanese\)/ /g;
-    s/^新版 / /;
+    s/^新版( ?)/$1/;
     s/\(Kodansha's Children's Classics\)/ /g;
     s/\(ヤングサンデーコミックス\)/ /g;
     s/\(CodeZine BOOKS\)/ /g;
@@ -81,6 +82,8 @@ for (@books) {
     s/―実戦で学ぶ関数型言語プログラミング/ /g;
     s/〔決定版〕/ /g;
     s/ \(ジャンプコミックス\)/ /g;
+    s/\[Dūn .*?\]/ /g;
+    s/\(ハウス\)//g;
 
     # numbering
     s/〈(\d+)〉/ ($1)/g;
@@ -100,7 +103,8 @@ for (@books) {
     s/Hokuto No Ken/北斗の拳/;
     s/DEATH\s*NOTE/Death Note/i;
     s/One piece/One Piece/;
-    s/ドラゴンボール/Dragonball/;
+    s/(?:Dragonball|ドラゴンボ－ル).*?(\d+).*/ドラゴンボール $1/;
+    s/(日本人の知らない日本語).*?(\d+).*/$1 $2/;
 
     # trim
     s/\s+$//g;
